@@ -21,7 +21,7 @@ import neko.Lib;
 
 class WrapSum
 {
-  static var sum = Lib.load( "Simple", 'sum', 2 );
+	static var sum = Lib.load( "Simple", 'sum', 2 );
 
 	public static function doSum( a : Int, b : Int )
 	{

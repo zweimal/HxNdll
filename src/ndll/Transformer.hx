@@ -144,7 +144,7 @@ class Transformer
 	static function processImportField(inField : Field, inParams : Hash<Dynamic>, outFields : Array<Field>) : Void
 	{
 		if (!isStatic(inField))
-			throw new Error("NdllImport: Function must be static", inField.pos);
+			throw new Error("ndll_import: Function must be static", inField.pos);
 		
 		var pos : Position = inField.pos;
 		var fieldName : String = inField.name;
@@ -205,7 +205,7 @@ class Transformer
 				outFields.push(inField);
 			
 			default:
-				throw new Error("NdllForward: It must be a function expression", pos);
+				throw new Error("ndll_forward: It must be a function expression", pos);
 		}
 	}
 	
@@ -248,7 +248,7 @@ class Transformer
 				outFields.push(inField);
 			
 			default:
-				throw new Error("NdllProperty: It must be a property expression", pos);
+				throw new Error("ndll_prop: It must be a property expression", pos);
 		}
 	}
 	

@@ -1,4 +1,4 @@
-<project name="hxndll" url="https://github.com/zweimal/haxe-ndll" license="GPLv2">
+<project name="hxndll" url="https://github.com/zweimal/haxe-ndll" license="GPL">
 	<user name="zweimal"/>
 	<tag v="cpp"/>
 	<tag v="neko"/>

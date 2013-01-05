@@ -57,9 +57,9 @@ First, you have to setup you project and there are at least 3 way to do that
 
 Personally I prefer method 1 or 3, because they leave no footprints at final code.
 
-Finally, you must add `@:ndll` or `@:ndll_use` metadata to your class in order to proccess it. Further on you will find complete info about it <a href="##get-shorter-user-defined-defaults">here</a>.
+Finally, you must add `@:ndll` or `@:ndll_use` metadata to your class in order to proccess it. Further on you will find complete info about it <a href="#get-shorter-user-defined-defaults">here</a>.
 
-__*!!Tip:*__ You only con use __Haxe Ndll__ with __classes__.  
+__*!!Tip:*__ You only can use __Haxe Ndll__ with __classes__.  
 
 Let's get down to work on Haxe classes:
 
@@ -82,9 +82,9 @@ static var wx_window_create : Array<Dynamic> -> Dynamic = cpp.Lib.load("waxe", "
 
 __HxNdll__ helps to forget the porting tricks, you don't need to worry about them. So forget to import `cpp.Lib` or `neko.Lib`, __HxNdll__ will do it for you depending on target.
 
-__*!!Tips:*__
-- `@:ndll_import` can be use with __static *functions*__ or __static *variables*__.
-- Only with __static *variables*__, mere `@:ndll` means `@:ndll_import`
+__*!!Tip:*__ `@:ndll_import` can be use with __static *functions*__ or __static *variables*__.  
+
+__*!!Tip:*__ Only with __static *variables*__, mere `@:ndll` means `@:ndll_import`
 
 ####`@:ndll_import` parameter list####
 - `lib`: type `String`, default is user defined otherwise throws an error.  

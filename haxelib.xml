@@ -1,0 +1,7 @@
+<project name="hxndll" url="https://github.com/zweimal/haxe-ndll" license="GPLv2">
+	<user name="zweimal"/>
+	<tag v="cpp"/>
+	<tag v="neko"/>
+	<description>Haxe NDLL import util.</description>
+	<version name="0.5.0">Initial release</version>
+</project>

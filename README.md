@@ -64,6 +64,9 @@ __*!!Tip:*__ You only can use __Haxe Ndll__ with __classes__.
 Let's get down to work on Haxe classes:
 
 ###First reduction: `@:ndll_import`###
+><pre>FFun(static, empty) -> FVar(static, w/ prim load)</pre>  
+><pre>FVar(static, empty) -> FVar(static, w/ prim load)</pre>
+
 It is the easiest and simplest reduction and it is used to load a primitive.
 i.e.:
 <pre>
@@ -113,3 +116,20 @@ __*!!Tip:*__ class metadatas `@:ndll_use` and `@:ndll` are the same thing, altho
 - `params`: type `Array<Expr>`, default is `[]` (empty array).  
 	Its value is an ordered list of arguments which will be merged with field arguments. See <a href="#parameters-merging">Paramaters Merging</a> section.
 
+###Second reduction: `@:ndll_forward`###
+> <pre>
+>              /-> FFun(w/ prim call)
+> FFun(empty) -|
+>              \-> FVar(static, w/ prim load)
+> </pre>
+
+`@:ndll_forward` generates primitive load and fills function block with primitive call.
+
+###Third reduction: `@:ndll_prop`###
+> <pre>
+>                             /-> FProp(w/ setter or getter) 
+>                             |-> nil or setter /-> FFun(w/ prim call)
+> FProp(w/ setter or getter) -|                 \-> FVar(static, w/ prim load)
+>                             \-> nil or getter /-> FFun(w/ prim call)
+>                                               \-> FVar(static, w/ prim load) 
+> </pre> 

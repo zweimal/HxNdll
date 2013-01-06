@@ -33,10 +33,10 @@ After:
 <pre>
 package wrapper;
 
-@:ndll
+@:ndll(lib="Simple")
 class WrapSum
 {
-	@:ndll(lib="Simple", name="sum")
+	@:ndll(name="sum")
 	public static function doSum( a : Int, b : Int ) : Int { }
 }
 </pre>

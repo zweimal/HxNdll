@@ -19,7 +19,7 @@
  * License along with this library; If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ndll;
+package hxndll;
 
 #if macro
 import haxe.macro.Context;
@@ -54,18 +54,33 @@ class Transformer
 	
 	static var finishedClasses = new Hash<Array<Field>>();
 	
-	@:macro static public function build():Array<Field>
+	var classRef : Null<Ref<ClassType>>;
+	var fields : Array<Field>;
+	var result : Array<Field>;
+	
+	@:macro static public function build() : Array<Field>
 	{
-		var fields = Context.getBuildFields();
-		var classRef = Context.getLocalClass();
+		return new Transformer(Context.getLocalClass(), Context.getBuildFields()).transform();
+	}
+	
+	private function new(classRef : Null<Ref<ClassType>>, fields : Array<Field>)
+	{
+		this.classRef = classRef;
+		this.fields = fields;
+		this.result = new Array<Field>();
+	}
+	
+	private function transform() : Array<Field> 
+	{
 		if (classRef == null)
 		{
-			trace(Context.getLocalType());
+			//trace(Context.getLocalType());
 			return fields;
 		}
+		
 		var localClass : ClassType = classRef.get();
 		var signature = Context.signature(localClass);
-		trace("Ndll class: " + localClass.name + " signature: " + signature);
+		//trace("Ndll class: " + localClass.name + " signature: " + signature);
 		if (finishedClasses.exists(signature))
 		{
 			trace("skipping: " + localClass.name);
@@ -80,8 +95,6 @@ class Transformer
 			return fields;
 		}
 		
-		var result = new Array<Field>();
-		
 		//trace("defualtLib: " + defaultParams.get(LIB));
 		
 		for (field in fields)
@@ -89,25 +102,25 @@ class Transformer
 			switch (getMetadataType(field.meta))
 			{
 				case MImport(params):
-					processImportField(field, mergeMetadataParams(params, defaultParams), result);
+					processImportField(field, mergeMetadataParams(params, defaultParams));
 				
 				case MForward(params):
-					processForwardField(field, mergeMetadataParams(params, defaultParams), result);
+					processForwardField(field, mergeMetadataParams(params, defaultParams));
 				
 				case MProperty(params):
-					processPropertyField(field, mergeMetadataParams(params, defaultParams), result);
+					processPropertyField(field, mergeMetadataParams(params, defaultParams));
 				
 				case MInfer(params):
 					switch (field.kind)
 					{
 						case FVar(t, e):
-							processImportField(field, mergeMetadataParams(params, defaultParams), result);
+							processImportField(field, mergeMetadataParams(params, defaultParams));
 							
 						case FFun(f):
-							processForwardField(field, mergeMetadataParams(params, defaultParams), result);
+							processForwardField(field, mergeMetadataParams(params, defaultParams));
 						
 						case FProp(g, s, t, b):
-							processPropertyField(field, mergeMetadataParams(params, defaultParams), result);
+							processPropertyField(field, mergeMetadataParams(params, defaultParams));
 						
 						default:
 							throw new Error("Ndll: Not valid field.", field.pos);
@@ -141,7 +154,7 @@ class Transformer
 		metadataParamsProcessors.set(CGEN, getBool);
 	}
 	
-	static function processImportField(inField : Field, inParams : Hash<Dynamic>, outFields : Array<Field>) : Void
+	function processImportField(inField : Field, inParams : Hash<Dynamic>) : Void
 	{
 		if (!isStatic(inField))
 			throw new Error("ndll_import: Function must be static", inField.pos);
@@ -177,11 +190,11 @@ class Transformer
 		}
 		
 		var prim : Field = createPrim(inParams.get(LIB), fieldName, primName, fargs, fret, pos);
-		//trace("after:" + prim);
-		outFields.push(prim);
+		//trace(primName + ": " + fargs + " ret: " + fret);
+		result.push(prim);
 	}
 	
-	static function processForwardField(inField : Field, inParams : Hash<Dynamic>, outFields : Array<Field>, ?isSetter : Bool = false) : Void
+	function processForwardField(inField : Field, inParams : Hash<Dynamic>, ?isSetter : Bool = false) : Void
 	{
 		var pos = inField.pos;
 		
@@ -197,19 +210,19 @@ class Transformer
 				mergeArgs(inParams.get(PARAMS), func.args, pos, argNames, argTypes);
 				
 				var prim : Field = createPrim(inParams.get(LIB), primName, primName, argTypes, retType, pos);
-				outFields.push(prim);
+				result.push(prim);
 				
-				//trace("func: " + func.expr);
+				//trace(primName + ": " + func.expr);
 				func.expr = createPrimCall(primName, argNames, retType, pos, isSetter);
-				//trace("func: " + func.expr);
-				outFields.push(inField);
+				//trace(primName + ": " + func.expr);
+				result.push(inField);
 			
 			default:
 				throw new Error("ndll_forward: It must be a function expression", pos);
 		}
 	}
 	
-	static function processPropertyField(inField : Field, inParams : Hash<Dynamic>, outFields : Array<Field>) : Void
+	function processPropertyField(inField : Field, inParams : Hash<Dynamic>) : Void
 	{
 		var pos = inField.pos;
 		
@@ -221,22 +234,31 @@ class Transformer
 				mergeMetadataParams(fieldParams, inParams);
 				var name : Null<String> = fieldParams.get(NAME);
 				
-				var getter : Null<Field> = createAccessor(get, type, inField, inParams);
-				if (getter != null)
+				var getter : Null<Field>;
+				
+				if (!hasField(get))
 				{
-					if (name != null)
-						fieldParams.set(NAME, "get_" + name);
-					
-					processForwardField(getter, fieldParams, outFields);
+					getter = createAccessor(get, type, inField, inParams);
+					if (getter != null)
+					{
+						if (name != null)
+							fieldParams.set(NAME, "get_" + name);
+						
+						processForwardField(getter, fieldParams);
+					}
 				}
 				
-				var setter : Null<Field> = createAccessor(set, type, inField, inParams, true);
-				if (setter != null)
+				var setter : Null<Field>;
+				if (!hasField(get))
 				{
-					if (name != null)
-						fieldParams.set(NAME, "set_" + name);
-					
-					processForwardField(setter, fieldParams, outFields, true);
+					setter = createAccessor(set, type, inField, inParams, true);
+					if (setter != null)
+					{
+						if (name != null)
+							fieldParams.set(NAME, "set_" + name);
+						
+						processForwardField(setter, fieldParams, true);
+					}
 				}
 				
 				if (getter != null)
@@ -245,11 +267,21 @@ class Transformer
 					set = setter.name;
 					
 				inField.kind = FProp(get, set, type, block);
-				outFields.push(inField);
+				result.push(inField);
 			
 			default:
 				throw new Error("ndll_prop: It must be a property expression", pos);
 		}
+	}
+	
+	function hasField(inName : String) : Bool
+	{
+		for (field in fields)
+		{
+			if (field.name == inName)
+				return true;
+		}
+		return false;
 	}
 	
 	static function createAccessor(name : String, type : ComplexType, inField : Field, inParams : Hash<Dynamic>, isSetter : Bool = false) : Null<Field>
@@ -306,7 +338,7 @@ class Transformer
 		function _eRet(exp : Expr) : Expr return _e(EReturn(exp));
 		
 		var primCall : Expr = _e( ECall( _eId(fname), fargs ) );
-		//trace("fret: " + fret);
+		//trace(fname + ": " + fret);
 		switch (fret)
 		{
 			case TPath(p):
@@ -558,7 +590,7 @@ class Transformer
 		{
 			while (it.hasNext())
 			{
-				splitFunctionArg(it, pos, outArgNames, outArgTypes);				
+				splitFunctionArg(it, pos, outArgNames, outArgTypes);
 			}
 		}
 	}

@@ -19,10 +19,13 @@
  * License along with this library; If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ndll;
+package hxndll;
 
 /**
  * ...
  * @author German Allemand
  */
-@:autoBuild(ndll.Transformer.build()) interface Importer { }
+#if macro
+typedef TypeTool = Type;
+
+#end

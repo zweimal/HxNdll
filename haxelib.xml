@@ -3,5 +3,5 @@
 	<tag v="cpp"/>
 	<tag v="neko"/>
 	<description>Haxe NDLL import util.</description>
-	<version name="0.5.0">Initial release</version>
+	<version name="0.5.2">package changed from ndll to hxndll</version>
 </project>

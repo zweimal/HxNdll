@@ -24,7 +24,7 @@
     <option flashStrict="False" />
     <option mainClass="TestMain" />
     <option enabledebug="False" />
-    <option additional="--macro ndll.Compiler.process(['test'])" />
+    <option additional="--macro hxndll.Compiler.process(['test'])" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

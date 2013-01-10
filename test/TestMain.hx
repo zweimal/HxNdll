@@ -1,5 +1,5 @@
 import haxe.unit.TestRunner;
-import ndll.NdllTest;
+import hxndll.HxNdllTest;
 
 /**
  * @author German Allemand
@@ -10,7 +10,7 @@ class TestMain
 	{
         var r = new TestRunner();
         
-		r.add(new NdllTest());
+		r.add(new HxNdllTest());
 
         r.run();
     }

@@ -1,4 +1,4 @@
-package ndll;
+package hxndll;
 import haxe.unit.TestCase;
 
 /**
@@ -6,7 +6,7 @@ import haxe.unit.TestCase;
  * @author German Allemand
  */
 
-class NdllTest extends TestCase
+class HxNdllTest extends TestCase
 {
 	private var frame : WaxeFrame;
 	
@@ -16,7 +16,7 @@ class NdllTest extends TestCase
 		{
 			try 
 			{
-				frame = new WaxeFrame(null, null, "NdllTest", null, { width: 450, height: 300 } );
+				frame = new WaxeFrame(null, null, "HxNdllTest", null, { width: 450, height: 300 } );
 				
 				WaxeApp.setTopWindow(frame);
 				frame.shown = true;

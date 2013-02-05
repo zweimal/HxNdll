@@ -1,0 +1,32 @@
+<xml>
+
+<!-- Build file for Simple.ndll -->
+<!-- Install hxcpp and run with 'haxelib run hxcpp Build.xml' -->
+
+<include name="${HXCPP}/build-tool/BuildCommon.xml"/>
+
+<set name="DBG" value="d" if="debug"/>
+
+<set name="BOOST_ROOT" value="../boost_1_52_0" unless="BOOST_ROOT"/>
+
+<files id="files">
+   <compilerflag value = "-Isrc/cpp/hxndll"/>
+   <compilerflag value = "-I${BOOST_ROOT}"/>
+   <compilerflag value = "-D_FILE_OFFSET_BITS=64" />
+   <compilerflag value = "-D_LARGE_FILES=64" />
+   
+   <file name="test/cpp/sample.cpp"/>
+</files>
+
+<target id="Simple.ndll" tool="linker" toolid="dll" output="Simple">
+   <files id="files"/>
+   <ext value=".ndll"/>
+   <outdir name="bin"/>
+</target>
+
+<target id="default">
+   <target id="Simple.ndll"/>
+</target>
+
+
+</xml>

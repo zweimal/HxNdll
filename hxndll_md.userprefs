@@ -1,0 +1,42 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="test/cpp/sample.cpp">
+    <Files>
+      <File FileName="test/TestMain.hx" Line="18" Column="1" />
+      <File FileName="src/hxndll/ObjectBase.hx" Line="27" Column="37" />
+      <File FileName="src/hxndll/Compiler.hx" Line="23" Column="1" />
+      <File FileName="test/hxndll/HxNdllTest.hx" Line="23" Column="26" />
+      <File FileName="test/wrapper/Sample.hx" Line="10" Column="35" />
+      <File FileName="src/hxndll/Transformer.hx" Line="325" Column="16" />
+      <File FileName="../../../../usr/lib/haxe/std/haxe/macro/Type.hx" Line="81" Column="2" />
+      <File FileName="test/cpp/sample.cpp" Line="10" Column="1" />
+      <File FileName="src/cpp/hxndll/hxndll.h" Line="289" Column="34" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="hxndll_md" expanded="True">
+            <Node name="bin" expanded="True" />
+            <Node name="src" expanded="True">
+              <Node name="cpp" expanded="True">
+                <Node name="hxndll" expanded="True" />
+              </Node>
+              <Node name="hxndll" expanded="True" />
+            </Node>
+            <Node name="test" expanded="True">
+              <Node name="cpp" expanded="True">
+                <Node name="sample.cpp" selected="True" />
+              </Node>
+              <Node name="hxndll" expanded="True" />
+              <Node name="wrapper" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

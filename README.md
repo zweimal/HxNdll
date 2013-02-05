@@ -9,6 +9,7 @@ Example
 -------
 
 Before:
+Haxe side:
 <pre>
 package wrapper;
 
@@ -29,6 +30,19 @@ class WrapSum
 }
 </pre>
 
+C++ side:
+<pre>
+#define IMPLEMENT_API
+#include <hx/CFFI.h>
+
+value sum(value a, value b)
+{
+    if( !val_is_int(a) || !val_is_int(b) ) return val_null;
+        return alloc_int(val_int(a) + val_int(b));
+}
+DEFINE_PRIM( sum, 2 );
+</pre>
+
 After:
 <pre>
 package wrapper;
@@ -36,9 +50,20 @@ package wrapper;
 @:ndll(lib="Simple")
 class WrapSum
 {
-	@:ndll(name="sum")
-	public static function doSum( a : Int, b : Int ) : Int { }
+	@:ndll public static function sum( a : Int, b : Int ) : Int { }
 }
+</pre>
+
+C++ side:
+<pre>
+#define IMPLEMENT_API
+#include <hx/CFFI.h>
+
+inline int wrapper_sample_sum(int a, int b)
+{
+    return a + b;
+}
+HXNDLL_DEFINE_PRIM( wrapper_sample_sum, 2 );
 </pre>
 
 Usage

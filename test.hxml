@@ -1,0 +1,5 @@
+-main TestMain
+-cp src 
+-cp test
+-cpp bin
+#-D HXCPP_M64

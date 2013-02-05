@@ -1,5 +1,6 @@
 package hxndll;
 import haxe.unit.TestCase;
+import wrapper.Sample;
 
 /**
  * ...
@@ -8,25 +9,19 @@ import haxe.unit.TestCase;
 
 class HxNdllTest extends TestCase
 {
-	private var frame : WaxeFrame;
+	private var sample : Sample;
 	
-	public function testBoot()
+	public function testPrimitives()
 	{
-		WaxeApp.boot(function()
-		{
-			try 
-			{
-				frame = new WaxeFrame(null, null, "HxNdllTest", null, { width: 450, height: 300 } );
-				
-				WaxeApp.setTopWindow(frame);
-				frame.shown = true;
-			}
-			catch (e : Dynamic)
-			{
-				trace(e);
-			}
-		});
+		var result : Int = Sample.sum(2, 3);
+		trace("result=" + result);
+		assertTrue(result == 5);
 		
-		assertTrue(frame.wxHandle != null);
+		sample = new Sample();
+		result = sample.sum7(1, 2, 3, 4, 5, 6, 7);
+		trace("result=" + result);
+		assertTrue(result == 28);
+		
+		sample.voidFunc(3.1416);
 	}
 }

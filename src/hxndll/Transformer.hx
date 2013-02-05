@@ -316,6 +316,10 @@ class Transformer
 		
 		if (fret == null)
 			fret = VOID;
+			
+		var argLen = fargs.length;
+		if (argLen > 5)
+			argLen = -1; 
 		
 		return {
 			name: fname,
@@ -325,7 +329,7 @@ class Transformer
 				TFunction(fargs, fret),
 				_e(	ECall(
 					eLoad(pos),
-					[ _cs(lib), _cs(prim), Context.makeExpr(fargs.length, pos) ]
+					[ _cs(lib), _cs(prim), Context.makeExpr(argLen, pos) ]
 				))
 			)
 		}
@@ -520,11 +524,15 @@ class Transformer
 		return result;
 	}
 	
-	static function getPrimName(inParams : Hash<Dynamic>, inFieldName : String) : String
+	function getPrimName(inParams : Hash<Dynamic>, inFieldName : String) : String
 	{
 		var prefix : String = inParams.get(PREFIX);
-		if (prefix == null)
-			prefix = "";
+		if (prefix == "")
+		{
+			var clazz : ClassType = classRef.get();
+			prefix = clazz.pack.join("_") + camel2underScore(clazz.name) + "_";
+			trace("using prefix: " + prefix);
+		}
 		var name : String = inParams.get(NAME);
 		if (name == null)
 			name = camel2underScore(inFieldName);

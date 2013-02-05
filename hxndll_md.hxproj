@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6CF2FD1A-B881-49CA-9DC1-F2D77E11BC16}</ProjectGuid>
+    <TargetHXMLFile>test.hxml</TargetHXMLFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>.</OutputPath>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="BeforeBuild" command="haxelib run hxcpp build_ndll.xml  -DHXCPP_M64" workingdir="${ProjectDir}" />
+        <Command type="Execute" command="bin/TestMain-debug" workingdir="bin" />
+      </CustomCommands>
+    </CustomCommands>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>.</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="src\hxndll\Compiler.hx" />
+    <Compile Include="src\hxndll\Importer.hx" />
+    <Compile Include="src\hxndll\Transformer.hx" />
+    <Compile Include="src\hxndll\TypeTool.hx" />
+    <Compile Include="test\TestMain.hx" />
+    <Compile Include="test\hxndll\HxNdllTest.hx" />
+    <Compile Include="test.hxml" />
+    <Compile Include="src\cpp\hxndll\hxndll.h" />
+    <Compile Include="src\hxndll\ObjectBase.hx" />
+    <Compile Include="test\wrapper\Sample.hx" />
+    <Compile Include="test\cpp\sample.cpp" />
+    <Compile Include="bin\Build.xml" />
+    <Compile Include="bin\Options.txt" />
+    <Compile Include="bin\TestMain" />
+    <Compile Include="bin\TestMain-debug" />
+    <Compile Include="bin\all_objs" />
+    <Compile Include="bin\include\List.h" />
+    <Compile Include="bin\include\Reflect.h" />
+    <Compile Include="bin\include\Std.h" />
+    <Compile Include="bin\include\StringBuf.h" />
+    <Compile Include="bin\include\StringTools.h" />
+    <Compile Include="bin\include\TestMain.h" />
+    <Compile Include="bin\include\Type.h" />
+    <Compile Include="bin\include\ValueType.h" />
+    <Compile Include="bin\include\cpp\Lib.h" />
+    <Compile Include="bin\include\haxe\Log.h" />
+    <Compile Include="bin\include\haxe\Public.h" />
+    <Compile Include="bin\include\haxe\Stack.h" />
+    <Compile Include="bin\include\haxe\StackItem.h" />
+    <Compile Include="bin\include\haxe\unit\TestCase.h" />
+    <Compile Include="bin\include\haxe\unit\TestResult.h" />
+    <Compile Include="bin\include\haxe\unit\TestRunner.h" />
+    <Compile Include="bin\include\haxe\unit\TestStatus.h" />
+    <Compile Include="bin\include\hxndll\HxNdllTest.h" />
+    <Compile Include="bin\include\hxndll\Importer.h" />
+    <Compile Include="bin\include\hxndll\ObjectBase.h" />
+    <Compile Include="bin\include\hxndll\WaxeApp.h" />
+    <Compile Include="bin\include\hxndll\WaxeFrame.h" />
+    <Compile Include="bin\include\wrapper\Sample.h" />
+    <Compile Include="bin\obj\linux-debug\Options.txt" />
+    <Compile Include="bin\obj\linux-debug\__pch\haxe\hxcpp.h.gch" />
+    <Compile Include="bin\obj\linux-debug\__pch\runtime\hxcpp.h.gch" />
+    <Compile Include="bin\obj\linux-debug\src\Array.o" />
+    <Compile Include="bin\obj\linux-debug\src\Class.o" />
+    <Compile Include="bin\obj\linux-debug\src\Dynamic.o" />
+    <Compile Include="bin\obj\linux-debug\src\Enum.o" />
+    <Compile Include="bin\obj\linux-debug\src\List.o" />
+    <Compile Include="bin\obj\linux-debug\src\Math.o" />
+    <Compile Include="bin\obj\linux-debug\src\Reflect.o" />
+    <Compile Include="bin\obj\linux-debug\src\Std.o" />
+    <Compile Include="bin\obj\linux-debug\src\String.o" />
+    <Compile Include="bin\obj\linux-debug\src\StringBuf.o" />
+    <Compile Include="bin\obj\linux-debug\src\StringTools.o" />
+    <Compile Include="bin\obj\linux-debug\src\TestMain.o" />
+    <Compile Include="bin\obj\linux-debug\src\Type.o" />
+    <Compile Include="bin\obj\linux-debug\src\ValueType.o" />
+    <Compile Include="bin\obj\linux-debug\src\__boot__.o" />
+    <Compile Include="bin\obj\linux-debug\src\__files__.o" />
+    <Compile Include="bin\obj\linux-debug\src\__main__.o" />
+    <Compile Include="bin\obj\linux-debug\src\__resources__.o" />
+    <Compile Include="bin\obj\linux-debug\src\cpp\Lib.o" />
+    <Compile Include="bin\obj\linux-debug\src\haxe\Log.o" />
+    <Compile Include="bin\obj\linux-debug\src\haxe\Public.o" />
+    <Compile Include="bin\obj\linux-debug\src\haxe\Stack.o" />
+    <Compile Include="bin\obj\linux-debug\src\haxe\StackItem.o" />
+    <Compile Include="bin\obj\linux-debug\src\haxe\unit\TestCase.o" />
+    <Compile Include="bin\obj\linux-debug\src\haxe\unit\TestResult.o" />
+    <Compile Include="bin\obj\linux-debug\src\haxe\unit\TestRunner.o" />
+    <Compile Include="bin\obj\linux-debug\src\haxe\unit\TestStatus.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\Anon.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\Boot.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\CFFI.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\Date.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\Debug.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\GC.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\GCInternal.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\Hash.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\Interface.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\Lib.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\Object.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\Scriptable.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\StdLibs.o" />
+    <Compile Include="bin\obj\linux-debug\src\hx\Thread.o" />
+    <Compile Include="bin\obj\linux-debug\src\hxndll\HxNdllTest.o" />
+    <Compile Include="bin\obj\linux-debug\src\hxndll\WaxeApp.o" />
+    <Compile Include="bin\obj\linux-debug\src\hxndll\WaxeFrame.o" />
+    <Compile Include="bin\obj\linux64\Options.txt" />
+    <Compile Include="bin\obj\linux64\__pch\haxe\hxcpp.h.gch" />
+    <Compile Include="bin\obj\linux64\__pch\runtime\hxcpp.h.gch" />
+    <Compile Include="bin\obj\linux64\src\Array.o" />
+    <Compile Include="bin\obj\linux64\src\Class.o" />
+    <Compile Include="bin\obj\linux64\src\Dynamic.o" />
+    <Compile Include="bin\obj\linux64\src\Enum.o" />
+    <Compile Include="bin\obj\linux64\src\List.o" />
+    <Compile Include="bin\obj\linux64\src\Math.o" />
+    <Compile Include="bin\obj\linux64\src\Reflect.o" />
+    <Compile Include="bin\obj\linux64\src\Std.o" />
+    <Compile Include="bin\obj\linux64\src\String.o" />
+    <Compile Include="bin\obj\linux64\src\StringBuf.o" />
+    <Compile Include="bin\obj\linux64\src\StringTools.o" />
+    <Compile Include="bin\obj\linux64\src\TestMain.o" />
+    <Compile Include="bin\obj\linux64\src\Type.o" />
+    <Compile Include="bin\obj\linux64\src\ValueType.o" />
+    <Compile Include="bin\obj\linux64\src\__boot__.o" />
+    <Compile Include="bin\obj\linux64\src\__files__.o" />
+    <Compile Include="bin\obj\linux64\src\__main__.o" />
+    <Compile Include="bin\obj\linux64\src\__resources__.o" />
+    <Compile Include="bin\obj\linux64\src\cpp\Lib.o" />
+    <Compile Include="bin\obj\linux64\src\haxe\Log.o" />
+    <Compile Include="bin\obj\linux64\src\haxe\Public.o" />
+    <Compile Include="bin\obj\linux64\src\haxe\Stack.o" />
+    <Compile Include="bin\obj\linux64\src\haxe\StackItem.o" />
+    <Compile Include="bin\obj\linux64\src\haxe\unit\TestCase.o" />
+    <Compile Include="bin\obj\linux64\src\haxe\unit\TestResult.o" />
+    <Compile Include="bin\obj\linux64\src\haxe\unit\TestRunner.o" />
+    <Compile Include="bin\obj\linux64\src\haxe\unit\TestStatus.o" />
+    <Compile Include="bin\obj\linux64\src\hx\Anon.o" />
+    <Compile Include="bin\obj\linux64\src\hx\Boot.o" />
+    <Compile Include="bin\obj\linux64\src\hx\CFFI.o" />
+    <Compile Include="bin\obj\linux64\src\hx\Date.o" />
+    <Compile Include="bin\obj\linux64\src\hx\Debug.o" />
+    <Compile Include="bin\obj\linux64\src\hx\GC.o" />
+    <Compile Include="bin\obj\linux64\src\hx\GCInternal.o" />
+    <Compile Include="bin\obj\linux64\src\hx\Hash.o" />
+    <Compile Include="bin\obj\linux64\src\hx\Interface.o" />
+    <Compile Include="bin\obj\linux64\src\hx\Lib.o" />
+    <Compile Include="bin\obj\linux64\src\hx\Object.o" />
+    <Compile Include="bin\obj\linux64\src\hx\Scriptable.o" />
+    <Compile Include="bin\obj\linux64\src\hx\StdLibs.o" />
+    <Compile Include="bin\obj\linux64\src\hx\Thread.o" />
+    <Compile Include="bin\obj\linux64\src\hxndll\HxNdllTest.o" />
+    <Compile Include="bin\obj\linux64\src\hxndll\Importer.o" />
+    <Compile Include="bin\obj\linux64\src\hxndll\ObjectBase.o" />
+    <Compile Include="bin\obj\linux64\src\wrapper\Sample.o" />
+    <Compile Include="bin\obj\linux64-debug\Options.txt" />
+    <Compile Include="bin\obj\linux64-debug\__pch\haxe\hxcpp.h.gch" />
+    <Compile Include="bin\obj\linux64-debug\__pch\runtime\hxcpp.h.gch" />
+    <Compile Include="bin\obj\linux64-debug\src\Array.o" />
+    <Compile Include="bin\obj\linux64-debug\src\Class.o" />
+    <Compile Include="bin\obj\linux64-debug\src\Dynamic.o" />
+    <Compile Include="bin\obj\linux64-debug\src\Enum.o" />
+    <Compile Include="bin\obj\linux64-debug\src\List.o" />
+    <Compile Include="bin\obj\linux64-debug\src\Math.o" />
+    <Compile Include="bin\obj\linux64-debug\src\Reflect.o" />
+    <Compile Include="bin\obj\linux64-debug\src\Std.o" />
+    <Compile Include="bin\obj\linux64-debug\src\String.o" />
+    <Compile Include="bin\obj\linux64-debug\src\StringBuf.o" />
+    <Compile Include="bin\obj\linux64-debug\src\StringTools.o" />
+    <Compile Include="bin\obj\linux64-debug\src\TestMain.o" />
+    <Compile Include="bin\obj\linux64-debug\src\Type.o" />
+    <Compile Include="bin\obj\linux64-debug\src\ValueType.o" />
+    <Compile Include="bin\obj\linux64-debug\src\__boot__.o" />
+    <Compile Include="bin\obj\linux64-debug\src\__files__.o" />
+    <Compile Include="bin\obj\linux64-debug\src\__main__.o" />
+    <Compile Include="bin\obj\linux64-debug\src\__resources__.o" />
+    <Compile Include="bin\obj\linux64-debug\src\cpp\Lib.o" />
+    <Compile Include="bin\obj\linux64-debug\src\haxe\Log.o" />
+    <Compile Include="bin\obj\linux64-debug\src\haxe\Public.o" />
+    <Compile Include="bin\obj\linux64-debug\src\haxe\Stack.o" />
+    <Compile Include="bin\obj\linux64-debug\src\haxe\StackItem.o" />
+    <Compile Include="bin\obj\linux64-debug\src\haxe\unit\TestCase.o" />
+    <Compile Include="bin\obj\linux64-debug\src\haxe\unit\TestResult.o" />
+    <Compile Include="bin\obj\linux64-debug\src\haxe\unit\TestRunner.o" />
+    <Compile Include="bin\obj\linux64-debug\src\haxe\unit\TestStatus.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\Anon.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\Boot.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\CFFI.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\Date.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\Debug.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\GC.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\GCInternal.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\Hash.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\Interface.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\Lib.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\Object.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\Scriptable.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\StdLibs.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hx\Thread.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hxndll\HxNdllTest.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hxndll\Importer.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hxndll\ObjectBase.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hxndll\WaxeApp.o" />
+    <Compile Include="bin\obj\linux64-debug\src\hxndll\WaxeFrame.o" />
+    <Compile Include="bin\obj\linux64-debug\src\wrapper\Sample.o" />
+    <Compile Include="bin\src\List.cpp" />
+    <Compile Include="bin\src\Reflect.cpp" />
+    <Compile Include="bin\src\Std.cpp" />
+    <Compile Include="bin\src\StringBuf.cpp" />
+    <Compile Include="bin\src\StringTools.cpp" />
+    <Compile Include="bin\src\TestMain.cpp" />
+    <Compile Include="bin\src\Type.cpp" />
+    <Compile Include="bin\src\ValueType.cpp" />
+    <Compile Include="bin\src\__boot__.cpp" />
+    <Compile Include="bin\src\__files__.cpp" />
+    <Compile Include="bin\src\__lib__.cpp" />
+    <Compile Include="bin\src\__main__.cpp" />
+    <Compile Include="bin\src\__resources__.cpp" />
+    <Compile Include="bin\src\cpp\Lib.cpp" />
+    <Compile Include="bin\src\haxe\Log.cpp" />
+    <Compile Include="bin\src\haxe\Public.cpp" />
+    <Compile Include="bin\src\haxe\Stack.cpp" />
+    <Compile Include="bin\src\haxe\StackItem.cpp" />
+    <Compile Include="bin\src\haxe\unit\TestCase.cpp" />
+    <Compile Include="bin\src\haxe\unit\TestResult.cpp" />
+    <Compile Include="bin\src\haxe\unit\TestRunner.cpp" />
+    <Compile Include="bin\src\haxe\unit\TestStatus.cpp" />
+    <Compile Include="bin\src\hxndll\HxNdllTest.cpp" />
+    <Compile Include="bin\src\hxndll\Importer.cpp" />
+    <Compile Include="bin\src\hxndll\ObjectBase.cpp" />
+    <Compile Include="bin\src\hxndll\WaxeApp.cpp" />
+    <Compile Include="bin\src\hxndll\WaxeFrame.cpp" />
+    <Compile Include="bin\src\wrapper\Sample.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
+    <Folder Include="test\cpp\" />
+    <Folder Include="test\wrapper\" />
+    <Folder Include="bin\" />
+  </ItemGroup>
+</Project>

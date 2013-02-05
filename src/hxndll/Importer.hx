@@ -25,4 +25,4 @@ package hxndll;
  * ...
  * @author German Allemand
  */
-@:autoBuild(ndll.Transformer.build()) interface Importer { }
+@:autoBuild(hxndll.Transformer.build()) interface Importer { }

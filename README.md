@@ -33,7 +33,7 @@ class WrapSum
 C++ side:
 <pre>
 #define IMPLEMENT_API
-#include <hx/CFFI.h>
+#include &lt;hx/CFFI.h&gt;
 
 value sum(value a, value b)
 {
@@ -57,7 +57,7 @@ class WrapSum
 C++ side:
 <pre>
 #define IMPLEMENT_API
-#include <hx/CFFI.h>
+#include "hxndll.h"
 
 inline int wrapper_sample_sum(int a, int b)
 {

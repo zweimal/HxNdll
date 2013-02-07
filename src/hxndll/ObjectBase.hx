@@ -32,14 +32,14 @@ class ObjectBase implements Importer
 	
 	inline public function isActive() : Bool
 	{
-		return __wxObj != null;
+		return __cObj != null;
 	}
 	
 	inline public function isInactive() : Bool
 	{
-		return __wxObj == null;
+		return __cObj == null;
 	}
 	
-	private var __wxObj : Dynamic;
+	private var __cObj : Dynamic;
 }
 

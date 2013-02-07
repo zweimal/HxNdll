@@ -2,6 +2,6 @@
 	<user name="zweimal"/>
 	<tag v="cpp"/>
 	<tag v="neko"/>
-	<description>Haxe NDLL import util.</description>
-	<version name="0.5.2">package changed from ndll to hxndll</version>
+	<description>NDLL creation utility for both ends (Haxe and C++)</description>
+	<version name="0.6.0">C++ back-end first approach</version>
 </project>

@@ -66,19 +66,25 @@ inline int wrapper_sample_sum(int a, int b)
 HXNDLL_DEFINE_PRIM( wrapper_sample_sum, 2 );
 </pre>
 
+Installation
+------------
+To install Haxe-ndll, in command prompt run this:  
+<pre>haxelib install hxndll</pre>
+And that's all. Ready to use.
+
 Usage
 -----
 
-First, you have to setup you project and there are at least 3 way to do that
+First, you have to setup your project and there are at least 3 way to do that
 
 1. In you `project.hxml` add:  
-	`--macro ndll.Compiler.process(['<path/to/src>', <path/to/another/src>, ...])`
+	`--macro hxndll.Compiler.process(['<path/to/src>', <path/to/another/src>, ...])`
 
-2. Implementing `ndll.Importer` each class you want to process.  
+2. Implementing `hxndll.Importer` each class you want to process.  
 	It uses `@:autoBuild` metatdata, see http://haxe.org/manual/macros/build#autobuild for more information.
 
 3. At each class you want to process add metadata:  
-	`@:build(ndll.Transformer.build())`
+	`@:build(hxndll.Transformer.build())`
 
 Personally I prefer method 1 or 3, because they leave no footprints at final code.
 

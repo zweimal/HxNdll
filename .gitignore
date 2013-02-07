@@ -1,1 +1,4 @@
-/bin
+bin/
+obj/
+all_objs
+*.o

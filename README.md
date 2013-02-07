@@ -1,8 +1,8 @@
-Haxe NDLL import util
+Haxe-ndll: a NDLL creation utility
 =====================
 
 If you have ever tried to write a Haxe/ndll binding, you know it so much repetitive; create every Haxe wrapper class with all theirs fields with primitive calls static variables for load primitives and code 
-the primitives with c/c++.
+the primitives with C/C++.
 This util will help on do it easier and faster.
 
 Example

@@ -65,6 +65,14 @@ inline int wrapper_sample_sum(int a, int b)
 }
 HXNDLL_DEFINE_PRIM( wrapper_sample_sum, 2 );
 </pre>
+![](tip.png) __Tip:__ You can see this complete fully functional example at test/sample directory.
+To Run it execute next at root path (optionals between brackets "[]"):
+<pre>
+haxelib run hxcpp build_ndll.xml [-DHXCPP_M64]
+haxe test.hxml [-D HXCPP_M64]
+cd bin 
+./TestMain[.exe]
+</pre>  
 
 Installation
 ------------

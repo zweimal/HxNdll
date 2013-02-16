@@ -90,7 +90,7 @@ Personally I prefer method 1 or 3, because they leave no footprints at final cod
 
 Finally, you must add `@:ndll` or `@:ndll_use` metadata to your class in order to proccess it. Further on you will find complete info about it <a href="#get-shorter-user-defined-defaults">here</a>.
 
-__*!!Tip:*__ You only can use __Haxe Ndll__ with __classes__.  
+![](tip.png) __Tip:__ You only can use __Haxe Ndll__ with __classes__.  
 
 Let's get down to work on Haxe classes:
 
@@ -116,9 +116,9 @@ static var wx_window_create : Array<Dynamic> -> Dynamic = cpp.Lib.load("waxe", "
 
 __HxNdll__ helps to forget the porting tricks, you don't need to worry about them. So forget to import `cpp.Lib` or `neko.Lib`, __HxNdll__ will do it for you depending on target.
 
-__*!!Tip:*__ `@:ndll_import` can be use with __static *functions*__ or __static *variables*__.  
+![](tip.png) __Tip:__ `@:ndll_import` can be use with __static *functions*__ or __static *variables*__.  
 
-__*!!Tip:*__ Only with __static *variables*__, mere `@:ndll` means `@:ndll_import`
+![](tip.png) __Tip:__ Only with __static *variables*__, mere `@:ndll` means `@:ndll_import`
 
 ####`@:ndll_import` parameter list####
 - `lib`: type `String`, default is user defined otherwise throws an error.  
@@ -138,7 +138,7 @@ static function create( args : Array<Dynamic> ) : Dynamic { }
 The main goal of __HxNdll__ is to write more with less. When you code a wrapper class usually all its methods have a pattern, I mean, they have the `@:ndll` metadata with almost the same parameters.
 Here is when `@:ndll_use` class metadata appears.
 
-__*!!Tip:*__ class metadatas `@:ndll_use` and `@:ndll` are the same thing, although the first is verbose.
+![](tip.png) __Tip:__ class metadatas `@:ndll_use` and `@:ndll` are the same thing, although the first is verbose.
 
 ####`@:ndll_use` default parameter list####
 - `lib`: type `String`. Its value is some library file name

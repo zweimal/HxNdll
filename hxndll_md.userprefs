@@ -8,7 +8,7 @@
       <File FileName="test/hxndll/HxNdllTest.hx" Line="14" Column="32" />
       <File FileName="test/wrapper/Sample.hx" Line="17" Column="39" />
       <File FileName="src/hxndll/Transformer.hx" Line="21" Column="1" />
-      <File FileName="../../../../usr/lib/haxe/std/haxe/macro/Type.hx" Line="81" Column="2" />
+      <File FileName="../../../../usr/lib/haxe/std/haxe/macro/Type.hx" Line="81" Column="1" />
       <File FileName="test/cpp/sample.cpp" Line="24" Column="1" />
       <File FileName="src/cpp/hxndll/hxndll.h" Line="130" Column="3" />
       <File FileName="test.hxml" Line="6" Column="1" />
@@ -16,7 +16,7 @@
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="hxndll_md" expanded="True">
+          <Node name="hxndll_md" expanded="True" selected="True">
             <Node name="bin" expanded="True">
               <Node name="obj" expanded="True" />
             </Node>
@@ -24,9 +24,7 @@
               <Node name="cpp" expanded="True">
                 <Node name="hxndll" expanded="True" />
               </Node>
-              <Node name="hxndll" expanded="True">
-                <Node name="ObjectBase.hx" selected="True" />
-              </Node>
+              <Node name="hxndll" expanded="True" />
             </Node>
             <Node name="test" expanded="True">
               <Node name="cpp" expanded="True" />

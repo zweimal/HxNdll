@@ -23,12 +23,12 @@ namespace hxndll
 	template <>
 	struct Converter<value>
 	{
-		static value extract(const value inVal)
+		static inline value extract(const value inVal)
 		{
 			return inVal;
 		}
 		
-		static value convert(const value inVal)
+		static inline value convert(const value inVal)
 		{
 			return inVal;
 		}

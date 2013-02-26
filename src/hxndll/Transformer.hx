@@ -35,42 +35,73 @@ import haxe.macro.Type;
 class Transformer 
 {
 	// Metadata params
-	static inline private var LIB : String = "lib";
-	static inline private var CGEN : String = "cgen";
-	static inline private var PREFIX : String = "prefix";
-	static inline private var NAME : String = "name";
-	static inline private var PARAMS : String = "params";
+	static inline var LIB : String = "lib";
+	static inline var CGEN : String = "cgen";
+	static inline var PREFIX : String = "prefix";
+	static inline var NAME : String = "name";
+	static inline var PARAMS : String = "params";
 	
 	// Argument types
-	static inline private var DYNAMIC : ComplexType = TPath({name: "Dynamic", pack: [], params: []});
-	static inline private var VOID : ComplexType = TPath({name: "Void", pack: [], params: []});
+	static inline function DYNAMIC() : ComplexType return TPath({name: "Dynamic", pack: [], params: []});
+	static inline function VOID() : ComplexType return TPath({name: "Void", pack: [], params: []});
 	
 	// Magic param modifiers
-	static inline private var WILDCARD : ExprDef = EConst(CIdent("_"));
-	static inline private var END : ExprDef = EConst(CIdent("$"));
+	static inline function WILDCARD() : ExprDef return EConst(CIdent("_"));
+	static inline function END() : ExprDef return EConst(CIdent("$"));
 	
 	// Expr null
-	static inline private var NULL : ExprDef = EConst(CIdent("null"));
+	static inline function NULL() : ExprDef return EConst(CIdent("null"));
 	
-	static var finishedClasses = new Hash<Array<Field>>();
+	static var finishedClasses = new Map<ClassType, Array<Field>>();
 	
+	static var target : String;
+	
+	static var defaultMetadataParamsProcessors : Map<String, Expr->Dynamic>;
+	static var metadataParamsProcessors : Map<String, Expr->Dynamic>;
+	
+	static function __init__() : Void
+	{
+		if (Context.defined("cpp")) 
+			target = "cpp";
+		else if (Context.defined("neko"))
+			target = "neko";
+		else 
+			throw new Error("HxNdll: Target must be 'neko' or 'cpp'", Context.currentPos());
+	
+		defaultMetadataParamsProcessors = new Map<String, Expr->Dynamic>();
+		defaultMetadataParamsProcessors.set(LIB, getStr);
+		defaultMetadataParamsProcessors.set(PREFIX, getStr);
+		defaultMetadataParamsProcessors.set(PARAMS, getExprs);
+		defaultMetadataParamsProcessors.set(CGEN, getBool);
+		
+		metadataParamsProcessors = new Map<String, Expr->Dynamic>();
+		metadataParamsProcessors.set(LIB, getStr);
+		metadataParamsProcessors.set(PREFIX, getStr);
+		metadataParamsProcessors.set(NAME, getStr);
+		metadataParamsProcessors.set(PARAMS, getExprs);
+		metadataParamsProcessors.set(CGEN, getBool);
+	}
+	
+	var defaultParams : Null<Map<String, Dynamic>>;
 	var classRef : Null<Ref<ClassType>>;
+	var classType : ClassType;
 	var fields : Array<Field>;
 	var result : Array<Field>;
-	
-	@:macro static public function build() : Array<Field>
+		
+	public static macro function build() : Array<Field>
 	{
 		return new Transformer(Context.getLocalClass(), Context.getBuildFields()).transform();
 	}
 	
-	private function new(classRef : Null<Ref<ClassType>>, fields : Array<Field>)
+	function new(classRef : Null<Ref<ClassType>>, fields : Array<Field>)
 	{
 		this.classRef = classRef;
 		this.fields = fields;
+		this.classType = classRef != null ? classRef.get() : null;   
 		this.result = new Array<Field>();
 	}
 	
-	private function transform() : Array<Field> 
+	function transform() : Array<Field> 
 	{
 		if (classRef == null)
 		{
@@ -78,22 +109,22 @@ class Transformer
 			return fields;
 		}
 		
-		var localClass : ClassType = classRef.get();
-		var signature = Context.signature(localClass);
-		//trace("Ndll class: " + localClass.name + " signature: " + signature);
-		if (finishedClasses.exists(signature))
+		
+		if (finishedClasses.exists(classType))
 		{
-			trace("skipping: " + localClass.name);
-			return finishedClasses.get(signature);
+			trace("skipping: " + classType.name);
+			return finishedClasses.get(classType);
 		}
 		
-		var defaultParams : Null<Hash<Dynamic>> = getDefaultMetadataParam(localClass.meta.get());
+		setupDefaultMetadataParams();
 	
 		if (defaultParams == null)
 		{
-			finishedClasses.set(signature, fields);
+			trace("skipping(r2): " + classType.name);
+			finishedClasses.set(classType, fields);
 			return fields;
 		}
+		trace("Ndll class: " + classType.name);
 		
 		//trace("defualtLib: " + defaultParams.get(LIB));
 		
@@ -113,17 +144,14 @@ class Transformer
 				case MInfer(params):
 					switch (field.kind)
 					{
-						case FVar(t, e):
+						case FVar(_, _):
 							processImportField(field, mergeMetadataParams(params, defaultParams));
 							
-						case FFun(f):
+						case FFun(_):
 							processForwardField(field, mergeMetadataParams(params, defaultParams));
 						
-						case FProp(g, s, t, b):
+						case FProp(_, _, _, _):
 							processPropertyField(field, mergeMetadataParams(params, defaultParams));
-						
-						default:
-							throw new Error("Ndll: Not valid field.", field.pos);
 					}
 				
 				default:
@@ -131,30 +159,12 @@ class Transformer
 			}
 		}
 		
-		finishedClasses.set(signature, result);
+		finishedClasses.set(classType, result);
 		return result;
 	}
 	
-	static var defaultMetadataParamsProcessors : Hash< Expr->Dynamic >;
-	static var metadataParamsProcessors : Hash< Expr->Dynamic >;
 	
-	static private function __init__() : Void
-	{
-		defaultMetadataParamsProcessors = new Hash< Expr->Dynamic >();
-		defaultMetadataParamsProcessors.set(LIB, getStr);
-		defaultMetadataParamsProcessors.set(PREFIX, getStr);
-		defaultMetadataParamsProcessors.set(PARAMS, getExprs);
-		defaultMetadataParamsProcessors.set(CGEN, getBool);
-		
-		metadataParamsProcessors = new Hash< Expr->Dynamic >();
-		metadataParamsProcessors.set(LIB, getStr);
-		metadataParamsProcessors.set(PREFIX, getStr);
-		metadataParamsProcessors.set(NAME, getStr);
-		metadataParamsProcessors.set(PARAMS, getExprs);
-		metadataParamsProcessors.set(CGEN, getBool);
-	}
-	
-	function processImportField(inField : Field, inParams : Hash<Dynamic>) : Void
+	function processImportField(inField : Field, inParams : Map<String, Dynamic>) : Void
 	{
 		if (!isStatic(inField))
 			throw new Error("ndll_import: Function must be static", inField.pos);
@@ -173,17 +183,10 @@ class Transformer
 				fargs = getArgTypes(func.args);
 				fret = nonNullType(func.ret);
 				
-			case FVar(type, _):
-				switch (type)
-				{
-					case TFunction(args, ret):
-						assureMetadataParams(inParams, [LIB], pos);
-						fargs = args;
-						fret = ret;
-					
-					default:
-						throw new Error("ndll_import: It must be a function expression", pos);
-				}
+			case FVar(TFunction(args, ret), _):
+				assureMetadataParams(inParams, [LIB], pos);
+				fargs = args;
+				fret = ret;
 			
 			default:
 				throw new Error("ndll_import: It must be a function expression", pos);
@@ -194,7 +197,7 @@ class Transformer
 		result.push(prim);
 	}
 	
-	function processForwardField(inField : Field, inParams : Hash<Dynamic>, ?isSetter : Bool = false) : Void
+	function processForwardField(inField : Field, inParams : Map<String, Dynamic>, ?isSetter : Bool = false) : Void
 	{
 		var pos = inField.pos;
 		
@@ -222,7 +225,7 @@ class Transformer
 		}
 	}
 	
-	function processPropertyField(inField : Field, inParams : Hash<Dynamic>) : Void
+	function processPropertyField(inField : Field, inParams : Map<String, Dynamic>) : Void
 	{
 		var pos = inField.pos;
 		
@@ -230,7 +233,7 @@ class Transformer
 		{
 			case FProp(get, set, type, block):
 				
-				var fieldParams = new Hash<Dynamic>();
+				var fieldParams = new Map<String, Dynamic>();
 				mergeMetadataParams(fieldParams, inParams);
 				var name : Null<String> = fieldParams.get(NAME);
 				
@@ -284,7 +287,7 @@ class Transformer
 		return false;
 	}
 	
-	static function createAccessor(name : String, type : ComplexType, inField : Field, inParams : Hash<Dynamic>, isSetter : Bool = false) : Null<Field>
+	static function createAccessor(name : String, type : ComplexType, inField : Field, inParams : Map<String, Dynamic>, isSetter : Bool = false) : Null<Field>
 	{
 		if (name == "null" || name == "never")
 			return null;
@@ -315,7 +318,7 @@ class Transformer
 		function _cs(s : String) : Expr { return _e( EConst(CString(s)) ); }
 		
 		if (fret == null)
-			fret = VOID;
+			fret = VOID();
 			
 		var argLen = fargs.length;
 		if (argLen > 5)
@@ -328,7 +331,7 @@ class Transformer
 			kind: FVar(
 				TFunction(fargs, fret),
 				_e(	ECall(
-					eLoad(pos),
+					macro $p{[target, "Lib", "load"]},
 					[ _cs(lib), _cs(prim), Context.makeExpr(argLen, pos) ]
 				))
 			)
@@ -357,9 +360,9 @@ class Transformer
 		return _eRet(primCall);
 	}
 	
-	static function getMetadataParams(meta : MetadataDef, processors : Hash<Expr->Dynamic>) : Hash<Dynamic>
+	static function getMetadataParams(meta : MetadataDef, processors : Map<String, Expr->Dynamic>) : Map<String, Dynamic>
 	{
-		var result = new Hash<Dynamic>();
+		var result = new Map<String, Dynamic>();
 		var proc : Expr->Dynamic;
 		var key : String;
 		var value : Dynamic;
@@ -387,7 +390,7 @@ class Transformer
 		return result;
 	}
 		
-	static function mergeMetadataParams(params : Hash<Dynamic>, defaultParams : Hash<Dynamic>) : Hash<Dynamic>
+	static function mergeMetadataParams(params : Map<String, Dynamic>, defaultParams : Map<String, Dynamic>) : Map<String, Dynamic>
 	{
 		for (key in defaultParams.keys())
 		{
@@ -398,7 +401,7 @@ class Transformer
 		return params;
 	}
 	
-	static function assureMetadataParams(params : Hash<Dynamic>, keys : Array<String>, pos : Position) : Void
+	static function assureMetadataParams(params : Map<String, Dynamic>, keys : Array<String>, pos : Position) : Void
 	{
 		for (key in keys)
 		{
@@ -524,7 +527,7 @@ class Transformer
 		return result;
 	}
 	
-	function getPrimName(inParams : Hash<Dynamic>, inFieldName : String) : String
+	function getPrimName(inParams : Map<String, Dynamic>, inFieldName : String) : String
 	{
 		var prefix : String = inParams.get(PREFIX);
 		if (prefix == "")
@@ -569,7 +572,7 @@ class Transformer
 	
 	static function nonNullType(?type : ComplexType) : ComplexType
 	{
-		return if (type != null) type else VOID;
+		return if (type != null) type else VOID();
 	}
 	
 	static function mergeArgs(params : Array<Expr>, fargs : Array<FunctionArg>, pos : Position, outArgNames : Array<Expr>, outArgTypes : Array<ComplexType>) : Void
@@ -578,11 +581,11 @@ class Transformer
 		var it = fargs.iterator();
 		for (e in params)
 		{
-			if (TypeTool.enumEq( e.expr, WILDCARD ))
+			if (TypeTool.enumEq( e.expr, WILDCARD() ))
 			{
 				splitFunctionArg(it, pos, outArgNames, outArgTypes);
 			}
-			else if (TypeTool.enumEq( e.expr, END ))
+			else if (TypeTool.enumEq( e.expr, END() ))
 			{
 				ended = true;
 				break;
@@ -590,7 +593,7 @@ class Transformer
 			else 
 			{
 				outArgNames.push(e);
-				outArgTypes.push(DYNAMIC);
+				outArgTypes.push(DYNAMIC());
 			}
 		}
 		
@@ -613,25 +616,24 @@ class Transformer
 		}
 		else
 		{
-			outArgNames.push( { expr: NULL, pos: pos } );
-			outArgTypes.push( DYNAMIC );
+			outArgNames.push( { expr: NULL(), pos: pos } );
+			outArgTypes.push( DYNAMIC() );
 		}
 	}
 	
-	static function getDefaultMetadataParam(meta : Metadata) : Null<Hash<Dynamic>>
+	function setupDefaultMetadataParams() : Void
 	{
-		for (m in meta)
+		for (m in classType.meta.get())
 		{
 			switch(m.name)
 			{
 				case ":ndll_use", ":ndll":
-					var result = getMetadataParams(m, defaultMetadataParamsProcessors);
-					if (!result.exists(PREFIX)) result.set(PREFIX, ""); 
-					if (!result.exists(PARAMS)) result.set(PARAMS, []); 
-					return result;
+					defaultParams = getMetadataParams(m, defaultMetadataParamsProcessors);
+					if (!defaultParams.exists(PREFIX)) defaultParams.set(PREFIX, ""); 
+					if (!defaultParams.exists(PARAMS)) defaultParams.set(PARAMS, []);
+					return;
 			}
 		}
-		return null;
 	}
 	
 	static function getMetadataType(meta : Metadata) : MetadataType
@@ -666,32 +668,16 @@ class Transformer
 		}
 		return false;
 	}
-	
-	static function eLoad(pos : Position) : Expr
-	{
-		function _eField(e : Expr, f : String) : Expr { return { expr: EField(e, f), pos: pos }; }
-		function _eId(s : String) : Expr { return { expr: EConst(CIdent(s)), pos: pos }; }
-		
-		var id : Expr;
-		if (Context.defined("cpp"))
-			id = _eId("cpp");
-		else if (Context.defined("neko"))
-			id = _eId("neko");
-		else
-			throw new Error("NdllImport: Target must be 'neko' or 'cpp'", pos);
-		
-		return _eField(_eField( id, "Lib"), "load");
-	}
 }
 
 typedef MetadataDef = { pos : Position, params : Array<Expr>, name : String };
 typedef ClassRef = { t : Ref<ClassType>, params : Array<Type> };
 
 enum MetadataType {
-	MImport(params : Hash<Dynamic>);
-	MForward(params : Hash<Dynamic>);
-	MProperty(params : Hash<Dynamic>);
-	MInfer(params : Hash<Dynamic>);
+	MImport(params : Map<String, Dynamic>);
+	MForward(params : Map<String, Dynamic>);
+	MProperty(params : Map<String, Dynamic>);
+	MInfer(params : Map<String, Dynamic>);
 	MNull;
 }
 
